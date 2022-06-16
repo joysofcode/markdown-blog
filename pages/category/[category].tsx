@@ -1,4 +1,4 @@
-import { bundleMDXFile } from 'mdx-bundler'
+import { bundleMDX } from 'mdx-bundler'
 import { cwd } from 'process'
 import { readdirSync } from 'fs'
 
@@ -61,7 +61,7 @@ export async function getStaticProps(context: Context) {
   const posts = []
 
   for (let path of postPaths) {
-    const markdown = await bundleMDXFile(path)
+    const markdown = await bundleMDX({ file: path })
     const { frontmatter } = markdown
 
     if (frontmatter.category === category) {

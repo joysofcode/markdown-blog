@@ -1,4 +1,4 @@
-import { bundleMDXFile } from 'mdx-bundler'
+import { bundleMDX } from 'mdx-bundler'
 import fs from 'fs'
 
 import { Post } from '@/root/types/post'
@@ -28,7 +28,7 @@ export async function getStaticProps() {
 
   for (let post of posts) {
     const postPath = `${currentDirectory}/posts/${post}/${post}.mdx`
-    const markdown = await bundleMDXFile(postPath)
+    const markdown = await bundleMDX({ file: postPath })
     const { frontmatter } = markdown
 
     const timestamp = new Date(frontmatter.published).valueOf()

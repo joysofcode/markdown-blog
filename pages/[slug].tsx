@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { bundleMDXFile } from 'mdx-bundler'
+import { bundleMDX } from 'mdx-bundler'
 import { getMDXComponent } from 'mdx-bundler/client'
-import { BundleMDXOptions } from 'mdx-bundler/dist/types'
+import type { ProcessorOptions } from '@mdx-js/esbuild/lib'
 import fs from 'fs'
 
 // mdx plugins
@@ -63,8 +63,8 @@ export async function getStaticProps({ params }: Params) {
   const { slug } = params
 
   // markdown plugins
-  const options: BundleMDXOptions = {
-    xdmOptions(options) {
+  const options = {
+    mdxOptions(options: ProcessorOptions) {
       options.remarkPlugins = [
         ...(options.remarkPlugins ?? []),
         // github flavored markdown
@@ -97,7 +97,7 @@ export async function getStaticProps({ params }: Params) {
   // post path
   const currentDirectory = process.cwd()
   const postPath = `${currentDirectory}/posts/${slug}/${slug}.mdx`
-  const markdown = await bundleMDXFile(postPath, options)
+  const markdown = await bundleMDX({ file: postPath, ...options })
   const { code, frontmatter: metadata } = markdown
 
   return {
